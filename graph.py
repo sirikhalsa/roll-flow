@@ -6,13 +6,18 @@ class Graph:
 
     # function to add a vertex to the dictionary
     def add_vertex(self, vertex):
-        self.graph_dict[vertex.value] = vertex
+        self.graph_dict[vertex.name] = vertex
 
     # function that employs the class method from the vertex class to add edges to vertices in the dictionary
+    # def add_edge(self, from_vertex, to_vertex, weight = 0):
+    #     self.graph_dict[from_vertex.name].add_edge(to_vertex.name, weight)
+    #     if not self.directed:
+    #         self.graph_dict[to_vertex.name].add_edge(from_vertex.name, weight)
+
     def add_edge(self, from_vertex, to_vertex, weight = 0):
-        self.graph_dict[from_vertex.value].add_edge(to_vertex.value, weight)
+        self.graph_dict[from_vertex.name].add_edge(to_vertex, weight)
         if not self.directed:
-            self.graph_dict[to_vertex.value].add_edge(from_vertex.value, weight)
+            self.graph_dict[to_vertex.name].add_edge(from_vertex, weight)
 
     # function to find a path from one vertex to another within the dictionary
     def find_path(self, start_vertex, end_vertex):

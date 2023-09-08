@@ -22,12 +22,12 @@ from heapq import heappop, heappush
 
 # Euclidean Heuristic:
 def heuristic(start, target):
- x_distance = abs(start.position[0] - target.position[0])
- y_distance = abs(start.position[1] - target.position[1])
- return sqrt((x_distance * x_distance) + (y_distance * y_distance))
+    x_distance = abs(start.position[0] - target.position[0])
+    y_distance = abs(start.position[1] - target.position[1])
+    return sqrt((x_distance * x_distance) + (y_distance * y_distance))
 
 def a_star(graph, start, target):
-    print("Starting A* algorithm!")
+    # print("Starting A* algorithm!")
     count = 0
     paths_and_distances = {}
     for vertex in graph:
@@ -38,21 +38,21 @@ def a_star(graph, start, target):
     while vertices_to_explore and paths_and_distances[target][0] == inf:
         current_distance, current_vertex = heappop(vertices_to_explore)
         for neighbor, edge_weight in graph[current_vertex]:
-            print(neighbor.name) #delete this
+            # print(neighbor.name) #delete this
             new_distance = current_distance + edge_weight + heuristic(neighbor, target)
-            print(new_distance) #del
+            # print(new_distance) #del
             new_path = paths_and_distances[current_vertex][1] + [neighbor.name]
-            print(new_path)
+            # print(new_path)
 
-        if new_distance < paths_and_distances[neighbor][0]:
-            print(new_distance, paths_and_distances[neighbor][0]) #del
-            paths_and_distances[neighbor][0] = new_distance
-            paths_and_distances[neighbor][1] = new_path
-            heappush(vertices_to_explore, (new_distance, neighbor))
-            count += 1
-            print("\nAt " + vertices_to_explore[0][1].name)
+            if new_distance < paths_and_distances[neighbor][0]:
+                # print(new_distance, paths_and_distances[neighbor][0]) #del
+                paths_and_distances[neighbor][0] = new_distance
+                paths_and_distances[neighbor][1] = new_path
+                heappush(vertices_to_explore, (new_distance, neighbor))
+                count += 1
+                # print("\nAt " + vertices_to_explore[0][1].name)
 
-    print("Found a path from {0} to {1} in {2} steps: ".format(start.name, target.name, count), paths_and_distances[target][0])
+    print("Found a path from {0} to {1} in {2} steps: ".format(start.name, target.name, count), paths_and_distances[target][1])
 
     return paths_and_distances[target][1]
 
@@ -72,6 +72,7 @@ def print_graph(graph):
         for adjacent_vertex in vertex_neighbors:
             print("=> " + adjacent_vertex.name)
 
+# Database
 bottom_guard = Vertex('Bottom Guard', 0, 0)
 top_guard = Vertex('Top Guard', 1, 0)
 bottom_half = Vertex('Bottom Half Guard', 0, 1)
@@ -89,23 +90,23 @@ rear_naked = Vertex('Rear Naked Choke', 6, 0)
 
 flow_map = Graph(True)
 # add vertices
-# flow_map.add_vertex(bottom_guard)
+flow_map.add_vertex(bottom_guard)
 flow_map.add_vertex(top_guard)
-# flow_map.add_vertex(bottom_half)
+flow_map.add_vertex(bottom_half)
 flow_map.add_vertex(top_half)
-# flow_map.add_vertex(bottom_side)
+flow_map.add_vertex(bottom_side)
 flow_map.add_vertex(top_side)
-# flow_map.add_vertex(bottom_mount)
+flow_map.add_vertex(bottom_mount)
 flow_map.add_vertex(top_mount)
-# flow_map.add_vertex(bottom_back)
-# flow_map.add_vertex(top_back)
+flow_map.add_vertex(bottom_back)
+flow_map.add_vertex(top_back)
 flow_map.add_vertex(armbar)
-# flow_map.add_vertex(kimura)
-# flow_map.add_vertex(americana)
-# flow_map.add_vertex(rear_naked)
+flow_map.add_vertex(kimura)
+flow_map.add_vertex(americana)
+flow_map.add_vertex(rear_naked)
 # add edges
-# flow_map.add_edge(bottom_guard, top_mount, 6)
-# flow_map.add_edge(bottom_guard, bottom_half, 8)
+flow_map.add_edge(bottom_guard, top_mount, 6)
+flow_map.add_edge(bottom_guard, bottom_half, 8)
 flow_map.add_edge(top_guard, top_half, 3)
 flow_map.add_edge(top_half, top_side, 3)
 flow_map.add_edge(top_half, top_mount, 100)
@@ -114,9 +115,105 @@ flow_map.add_edge(top_mount, armbar, 1)
 
 # print_graph(flow_map)
 flow_map_graph = graph_builder(flow_map)
+# print_graph(flow_map)
 # print(heuristic(bottom_guard, top_mount))
-a_star1 = a_star(flow_map_graph, top_guard, armbar)
-print(a_star1)
+# a_star1 = a_star(flow_map_graph, top_guard, armbar)
+
+# run functions
+
+title = '''
+_________________________________________________________________________
+_________________________________________________________________________
+RRRRRRRR  OOOOOOO  L        L          FFFFFFF  L        OOOOOOO  W     W
+R      R  O     O  L        L          F        L        O     O  W     W
+R      R  O     O  L        L          F        L        O     O  W     W
+RRRRRRRR  O     O  L        L          FFFFFFF  L        O     O  W     W
+R   R     O     O  L        L          F        L        O     O  W  W  W
+R    R    O     O  L        L          F        L        O     O  W W W W
+R     R   O     O  L        L          F        L        O     O  WW   WW
+R      R  OOOOOOO  LLLLLLL  LLLLLLL    F        LLLLLLL  OOOOOOO  W     W
+_________________________________________________________________________
+_________________________________________________________________________
+'''
+
+pos_dict = {
+    1: bottom_guard,
+    2: top_guard,
+    3: bottom_half,
+    4: top_half,
+    5: bottom_side,
+    6: top_side,
+    7: bottom_mount,
+    8: top_mount,
+    9: bottom_back,
+    10: top_back
+}
+
+sub_dict = {
+    1: armbar,
+    2: kimura,
+    3: americana,
+    4: rear_naked
+}
+
+pos_or_sub_string = '''
+1. Position
+2. Submission
+'''
+
+def greeting():
+    print(title)
+    print('\nWelcome to Roll Flow! \nRoll Flow is designed to help find the most efficient path from a starting position to another position or submission.')
+
+def set_start_pos():
+    print('Which position are you starting from? Please select one of the following options:\n')
+    for key, val in pos_dict.items():
+        print('{}. {}'.format(key, val.name))
+    start_idx = input('\n>>>')
+    start_pos = pos_dict[int(start_idx)]
+    print('Starting from {}\n'.format(start_pos.name))
+    return start_pos
+
+def set_finish_pos(start_pos):
+    to_pos_or_sub = int(input('Are you looking for a path to a position or a submission: {}\n>>>'.format(pos_or_sub_string)))
+
+    if to_pos_or_sub == 1:
+        print('Great, please select from one of the following positions:\n')
+        for key, val in pos_dict.items():
+            print('{}. {}'.format(key, val.name))
+        finish_idx = input('\n>>>')
+        finish_pos = pos_dict[int(finish_idx)]
+        if finish_pos == start_pos:
+            print('You have selected the same starting and finishing positions, please try again...\n')
+            set_finish_pos(start_pos)
+    elif to_pos_or_sub == 2:
+        print('Great, please select from one of the following submissions:\n')
+        for key, val in sub_dict.items():
+            print('{}. {}'.format(key, val.name))
+        finish_idx = input('\n>>>')
+        finish_pos = sub_dict[int(finish_idx)]
+    print('Finishing with {}\n'.format(finish_pos.name))
+    return finish_pos
+
+def goodbye():
+    print('\nThank you for using Roll Flow!\n')
+
+def set_positions():
+    start_pos = set_start_pos()
+    finish_pos = set_finish_pos(start_pos)
+    return start_pos, finish_pos
+
+def execute():
+    start, finish = set_positions()
+    a_star(flow_map_graph, start, finish)
+
+def run():
+    greeting()
+    execute()
+    goodbye()
+
+run()
+
 
 
 # Test

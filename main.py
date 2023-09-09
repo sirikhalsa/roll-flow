@@ -7,6 +7,7 @@ from graph import Graph
 from vertex import Vertex
 from math import inf, sqrt
 from heapq import heappop, heappush
+from dijkstra_version import dijkstras, dijkstras_target, graph2
 
 
 # import the graph and both vertices from the graph files below
@@ -205,7 +206,7 @@ def set_positions():
 
 def execute():
     start, finish = set_positions()
-    a_star(flow_map_graph, start, finish)
+    dijkstras_target(graph2, start.name, finish.name)
 
 def run():
     greeting()
